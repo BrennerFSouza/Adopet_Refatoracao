@@ -3,6 +3,7 @@ package br.com.alura.service;
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Abrigo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -21,7 +22,8 @@ class AbrigoServiceTest {
     private Abrigo abrigo = new Abrigo("Teste", "61981880392", "abrigo_alura@gmail.com");
 
     @Test
-    public void deveVerificarSeDispararRequisicaoGetSeraChamado() throws IOException, InterruptedException {
+    @DisplayName("Deve listar os abrigos cadastrados")
+    public void listarAbrigoCenario1() throws IOException, InterruptedException {
         abrigo.setId(0L);
         String expectedAbrigosCadastrados = "Abrigos cadastrados:";
         String expectedIdENome = "0 - Teste";
@@ -41,5 +43,26 @@ class AbrigoServiceTest {
 
         Assertions.assertEquals(expectedAbrigosCadastrados, actualAbrigosCadastrados);
         Assertions.assertEquals(expectedIdENome, actualIdENome);
+    }
+
+    @Test
+    @DisplayName("Deve retornar lista vazia de abrigos")
+    public void listarAbrigoCenario2() throws IOException, InterruptedException {
+        String expectedAbrigosCadastrados = "Abrigos cadastrados:";
+        String expectedIdENome = "Não há abrigos cadastrados";
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+        System.setOut(printStream);
+
+        when(response.body()).thenReturn("[]");
+        when(client.dispararRequisicaoGet(anyString())).thenReturn(response);
+
+        abrigoService.listarAbrigo();
+
+        String[] lines = baos.toString().split(System.lineSeparator());
+        String actualAbrigosCadastrados = lines[0];
+
+        Assertions.assertEquals(expectedAbrigosCadastrados, actualAbrigosCadastrados);
     }
 }
