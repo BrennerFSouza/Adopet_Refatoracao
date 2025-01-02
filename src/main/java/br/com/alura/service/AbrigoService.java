@@ -3,13 +3,8 @@ package br.com.alura.service;
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Abrigo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +18,7 @@ public class AbrigoService {
         this.client = client;
     };
 
-    public  void listarAbrigos() throws IOException, InterruptedException {
+    public  void listarAbrigo() throws IOException, InterruptedException {
         String uri = "http://localhost:8080/abrigos";
         HttpResponse<String> response = client.dispararRequisicaoGet(uri);
         String responseBody = response.body();
